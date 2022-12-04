@@ -76,9 +76,13 @@ public class Mine implements IMine{
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;
         System.out.println(warehouseMenu());
-        System.out.println("Choose action to perform: ");
+        System.out.println("Choose action to perform in warehouse: ");
 
         while(!quit){
+            if(!scanner.hasNextInt()){
+                System.out.println("Type in number!");
+                scanner.next();
+            }
             int choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -117,14 +121,68 @@ public class Mine implements IMine{
                     break;
                 case 6:
                     System.out.println(warehouseMenu());
+                default:
+                    System.out.println("Wrong request!");
+                    break;
             }
         }
     }
 
     @Override
     public void manageStockpile() {
-        System.out.println("Things in the stockpile: "+ mineStockpile.toString());
-       // mineStockpile.forEach(System.out::println);
+        Scanner scanner = new Scanner(System.in);
+        boolean quit = false;
+        stockpileMenu();
+        System.out.println("Choose action to perform in stockpile: ");
+        while(!quit){
+            if(!scanner.hasNextInt()){
+                System.out.println("Type in number!");
+                scanner.next();
+            }
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch(choice){
+                case 0:
+                    System.out.println("Leaving the stockpile...");
+                    quit = true;
+                    break;
+                case 1:
+                    System.out.println("Things in the stockpile: "+ mineStockpile.toString());
+                    // mineStockpile.forEach(System.out::println);
+                    break;
+                case 2:
+                    System.out.println(mineStockpile.peek()+" is on top of the mining stockpile");
+                    break;
+                case 3:
+                    System.out.println(mineStockpile.peek()+" removed from the stockpile");
+                    mineStockpile.pop();
+                    break;
+                case 4:
+                    System.out.println("Transfer to put "+mineStockpile.peek()+" into warehouse begins");
+                    Resources resourceToTransfer = mineStockpile.peek();
+                    if(mineWarehouse.size() == 10){
+                        System.out.println("There is no more space in the warehouse!");
+                        break;
+                    }else{
+                        mineWarehouse.add(resourceToTransfer);
+                        mineStockpile.pop();
+                        System.out.println("Transfer completed");
+                    }
+                    break;
+                case 5:
+                    manageWarehouse();
+                    break;
+                case 6:
+                    stockpileMenu();
+                    break;
+                default:
+                    System.out.println("Wrong request!");
+                    break;
+            }
+        }
+
+
+
     }
 
     @Override
@@ -139,8 +197,19 @@ public class Mine implements IMine{
                 "2 - select next resource \n" +
                 "3 - select previous resource \n" +
                 "4 - move resource to the stockpile \n" +
-                "5 - show stockpile's contents (temporary option) \n" +
+                "5 - manage stockpile \n" +
                 "6 - display possible actions";
+    }
+
+    public void stockpileMenu(){
+        System.out.println("Possible actions: \n" +
+                "0 - leave stockpile \n" +
+                "1 - display contents of the stockpile \n" +
+                "2 - show what's on top \n" +
+                "3 - discard the resource from top \n" +
+                "4 - move resource on top to warehouse \n" +
+                "5 - manage warehouse \n" +
+                "6 - display possible actions");
     }
 
 }

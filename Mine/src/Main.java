@@ -12,6 +12,10 @@ public class Main {
         boolean quit = false;
         uiMenu();
         while(!quit){
+            if(!scanner.hasNextInt()){
+                System.out.println("Type in number!");
+                scanner.next();
+            }
             int action = scanner.nextInt();
             scanner.nextLine();
             switch (action){
@@ -42,7 +46,15 @@ public class Main {
                     System.out.println(mine.getName());
                     break;
                 case 7:
+                    mine.manageStockpile();
                     uiMenu();
+                    break;
+                case 8:
+                    uiMenu();
+                    break;
+                default:
+                    System.out.println("Unknown request!");
+                    break;
             }
         }
     }
@@ -54,7 +66,8 @@ public class Main {
                 "3 - manage the warehouse \n" +
                 "4 - rename the mine  \n" +
                 "5 - show passed days \n" +
-                "6 - display mine details \n"+
-                "7 - display possible actions");
+                "6 - display mine details \n" +
+                "7 - manage the stockpile \n"+
+                "8 - display possible actions");
     }
 }
