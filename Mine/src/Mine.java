@@ -11,6 +11,10 @@ public class Mine implements IMine{
     private String name;
     private int workingHours = 0;
     private int passedDays = 0;
+    private Resources craft1;
+    private Resources craft2;
+    private Resources craft3;
+    private int craftCounter;
 
 
     public Mine(String name) {
@@ -121,6 +125,40 @@ public class Mine implements IMine{
                     break;
                 case 6:
                     System.out.println(warehouseMenu());
+                    break;
+                case 7:
+                    System.out.println("===Crafting===");
+                    if(craft1 == null){
+                        craft1 = listIterator.previous();
+                        listIterator.remove();
+                        System.out.println("First crafting resource: "+craft1);
+                        break;
+                    } else if(craft1 != null && craft2 == null){
+                        craft2 = listIterator.previous();
+                        listIterator.remove();
+                        System.out.println("Second crafting resource: "+craft2);
+                        break;
+                    } else if(craft1 != null && craft2 != null && craft3 == null){
+                        craft3 = listIterator.previous();
+                        listIterator.remove();
+                        System.out.println("Third  crafting resource: "+craft3);
+                        System.out.println("Three resources gathered. Press 7 again to begin crafting");
+                        break;
+                    }
+
+                    if(craft1 != null && craft2 != null && craft3 != null){
+                        if(chain.craftLink(craft1, craft2, craft3)){
+                            System.out.println("Success");
+                            removeCraftRes();
+                        }else{
+                            System.out.println("Failure");
+                            mineWarehouse.add(craft1);
+                            mineWarehouse.add(craft2);
+                            mineWarehouse.add(craft3);
+                            removeCraftRes();
+                        }
+                    }
+                    break;
                 default:
                     System.out.println("Wrong request!");
                     break;
@@ -198,7 +236,8 @@ public class Mine implements IMine{
                 "3 - select previous resource \n" +
                 "4 - move resource to the stockpile \n" +
                 "5 - manage stockpile \n" +
-                "6 - display possible actions";
+                "6 - display possible actions \n" +
+                "7 - begin crafting";
     }
 
     public void stockpileMenu(){
@@ -211,5 +250,12 @@ public class Mine implements IMine{
                 "5 - manage warehouse \n" +
                 "6 - display possible actions");
     }
+
+    public void removeCraftRes(){
+        craft1 = null;
+        craft2 = null;
+        craft3 = null;
+    }
+
 
 }
